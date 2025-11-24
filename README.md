@@ -138,7 +138,7 @@
   <div class="container">
     <h1>Poster Topic Registration</h1>
     <p class="muted">
-      Bachelor in Computer Science · Group Poster Session<br />
+     Group Poster Session · Bachelor in Computer Science · FSTM · University of Luxembourg (2025–2026)<br />
       One representative per group should register the topic here.
     </p>
 
@@ -571,4 +571,4 @@
     renderAssignmentsTable();
   </script>
 </body>
-</html>
+
