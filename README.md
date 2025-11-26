@@ -253,30 +253,114 @@
     const STORAGE_KEY = "uni_poster_assignments_v4"; // Using v4 (Fresh Database)
     const ADMIN_PASSWORD = "admin"; // Admin password to reset all
 
-    // --- Data Source ---------------------------------------------------------
-    const topics = [
-      { id: "dl-basics", label: "Deep Learning Fundamentals", level: "easy", description: "Core concepts of Neural Networks (CNNs, MLPs) for standard classification tasks.", example: "Handwritten digit classification (MNIST) using simple CNNs." },
-      { id: "nlp-sentiment", label: "NLP: Sentiment Analysis", level: "easy", description: "Processing text to determine emotion or opinion (positive/negative/neutral).", example: "Movie review classifier using RNNs or Transformers." },
-      { id: "cv-classification", label: "CV: Image Classification", level: "easy", description: "Assigning labels to images (e.g., Cat vs Dog, X-Ray disease detection).", example: "Classifying plants or animals using Transfer Learning (ResNet)." },
-      { id: "recommender", label: "Recommender Systems", level: "easy", description: "Algorithms that suggest items to users (movies, products, music).", example: "Collaborative filtering for movie recommendations." },
-      { id: "cv-detection", label: "CV: Object Detection", level: "medium", description: "Locating and identifying multiple objects within an image.", example: "Traffic sign detection using YOLO." },
-      { id: "nlp-chatbot", label: "NLP: Chatbots & Q&A", level: "medium", description: "Systems that can answer questions or hold simple conversations.", example: "Building a FAQ bot using RAG (Retrieval-Augmented Generation)." },
-      { id: "time-series", label: "Time Series Forecasting", level: "medium", description: "Predicting future values based on past time-sequenced data.", example: "Stock price or weather prediction using LSTM/GRU." },
-      { id: "ai-games", label: "AI for Games", level: "medium", description: "Creating agents that can play games or control NPCs.", example: "Training an agent to play Super Mario using Reinforcement Learning." },
-      { id: "ai-health", label: "AI in Healthcare", level: "medium", description: "Applying ML to medical diagnostics, imaging, or records.", example: "Tumor segmentation in MRI scans." },
-      { id: "ai-finance", label: "AI in FinTech", level: "medium", description: "Fraud detection, credit scoring, or algorithmic trading.", example: "Detecting credit card fraud with Anomaly Detection." },
-      { id: "cybersec", label: "AI for Cybersecurity", level: "medium", description: "Using ML to detect network attacks, phishing, or malware.", example: "Email phishing detection using Natural Language Processing." },
-      { id: "xai", label: "Explainable AI (XAI)", level: "medium", description: "Techniques to make 'black box' AI models interpretable to humans.", example: "Using SHAP/LIME to explain why a loan was rejected." },
-      { id: "audio-ai", label: "Audio & Speech Processing", level: "medium", description: "Analyzing audio signals for recognition or classification.", example: "Speech command recognition or music genre classification." },
-      { id: "ethics", label: "AI Ethics, Bias & Fairness", level: "medium", description: "Studying and mitigating bias in datasets and models.", example: "Demonstrating and fixing gender bias in hiring algorithms." },
-      { id: "gen-ai", label: "Generative AI (Images/Text)", level: "advanced", description: "Models that create new content. Includes GANs, Diffusion models, and LLMs.", example: "Image generation with Stable Diffusion or text generation with GPT." },
-      { id: "gnn", label: "Graph Neural Networks (GNN)", level: "advanced", description: "Deep learning on graph-structured data (social networks, molecules).", example: "Predicting chemical properties of molecules." },
-      { id: "autonomous", label: "Autonomous Vehicles / Robotics", level: "advanced", description: "Perception, planning, and control systems for robots.", example: "Lane keeping and obstacle avoidance simulation." },
-      { id: "federated", label: "Federated Learning", level: "advanced", description: "Training models across decentralized devices preserving privacy.", example: "Collaborative learning on mobile devices without data sharing." },
-      { id: "multi-modal", label: "Multi-modal Learning", level: "advanced", description: "Learning from multiple types of data (e.g., Image + Text) simultaneously.", example: "Visual Question Answering (VQA) systems." },
-      { id: "edge-ai", label: "Edge AI / TinyML", level: "advanced", description: "Optimizing and running AI models on hardware with limited resources.", example: "Real-time keyword spotting on a Raspberry Pi." },
-      { id: "custom", label: "Other / Propose a custom topic", level: "custom", description: "<strong>Requires Approval:</strong> Do you have a specific research interest not listed here? Please contact TA Hongyang Li.", example: "Your specific approved research title." }
-    ];
+// --- Data Source ---------------------------------------------------------
+const topics = [
+  { id: "dl-basics", label: "Deep Learning Fundamentals",
+    description: "A friendly intro to how neural networks work and why they’re useful. Covers simple models like MLPs and CNNs.",
+    example: "Training a small CNN to recognize handwritten digits (MNIST)."
+  },
+
+  { id: "nlp-sentiment", label: "NLP: Sentiment Analysis",
+    description: "Figuring out whether a piece of text sounds positive, negative, or neutral using language models.",
+    example: "Checking if movie reviews are positive or negative with an RNN or Transformer."
+  },
+
+  { id: "cv-classification", label: "CV: Image Classification",
+    description: "Teaching computers to identify what’s inside an image by assigning it a label.",
+    example: "Using ResNet to classify different plants or animals."
+  },
+
+  { id: "recommender", label: "Recommender Systems",
+    description: "Models that help suggest things you might like based on your past behavior.",
+    example: "Building a simple movie recommendation system with collaborative filtering."
+  },
+
+  { id: "cv-detection", label: "CV: Object Detection",
+    description: "Finding multiple objects in an image and figuring out where they are.",
+    example: "Detecting traffic signs using a YOLO model."
+  },
+
+  { id: "nlp-chatbot", label: "NLP: Chatbots & Q&A",
+    description: "Building systems that can answer questions or chat with users in a basic way.",
+    example: "Creating a simple FAQ bot using RAG."
+  },
+
+  { id: "time-series", label: "Time Series Forecasting",
+    description: "Using past data to guess what might happen next in a sequence.",
+    example: "Predicting weather changes or stock prices with LSTMs or GRUs."
+  },
+
+  { id: "ai-games", label: "AI for Games",
+    description: "Training game-playing agents that learn strategies by interacting with a game world.",
+    example: "Teaching a reinforcement learning agent to play Super Mario."
+  },
+
+  { id: "ai-health", label: "AI in Healthcare",
+    description: "Using machine learning for medical images or health data to help with diagnosis or analysis.",
+    example: "Detecting tumors in MRI scans with a segmentation model."
+  },
+
+  { id: "ai-finance", label: "AI in FinTech",
+    description: "Applying AI to financial problems like fraud detection or risk scoring.",
+    example: "Spotting credit card fraud using anomaly detection."
+  },
+
+  { id: "cybersec", label: "AI for Cybersecurity",
+    description: "Using ML models to catch suspicious or malicious activity online.",
+    example: "Detecting phishing emails using NLP techniques."
+  },
+
+  { id: "xai", label: "Explainable AI (XAI)",
+    description: "Making AI models easier to understand so we know why they make certain decisions.",
+    example: "Explaining a loan approval model using SHAP or LIME."
+  },
+
+  { id: "audio-ai", label: "Audio & Speech Processing",
+    description: "Working with audio data to recognize speech, classify sounds, or understand signals.",
+    example: "Speech command recognition or music genre classification."
+  },
+
+  { id: "ethics", label: "AI Ethics, Bias & Fairness",
+    description: "Checking whether AI systems treat people fairly and figuring out how to reduce bias.",
+    example: "Studying gender bias in hiring algorithms and testing ways to fix it."
+  },
+
+  { id: "gen-ai", label: "Generative AI (Images/Text)",
+    description: "Models that can create new images, text, or other content from scratch.",
+    example: "Generating images with diffusion models or producing text with GPT."
+  },
+
+  { id: "gnn", label: "Graph Neural Networks (GNN)",
+    description: "Models designed to work with graph-structured data like social networks or molecules.",
+    example: "Predicting molecular properties using GNNs."
+  },
+
+  { id: "autonomous", label: "Autonomous Vehicles / Robotics",
+    description: "Techniques that help machines see, plan, and make decisions in the real world.",
+    example: "Simulating lane keeping and obstacle avoidance for a self-driving car."
+  },
+
+  { id: "federated", label: "Federated Learning",
+    description: "Training models across many devices without collecting all the data in one place.",
+    example: "Collaborative model training on phones while keeping user data private."
+  },
+
+  { id: "multi-modal", label: "Multi-modal Learning",
+    description: "Teaching models to understand multiple types of data at the same time, like images plus text.",
+    example: "Building a Visual Question Answering (VQA) system."
+  },
+
+  { id: "edge-ai", label: "Edge AI / TinyML",
+    description: "Running AI models on small or low-power devices like microcontrollers or Raspberry Pi.",
+    example: "Real-time keyword spotting on a Raspberry Pi."
+  },
+
+  { id: "custom", label: "Other / Propose a Custom Topic",
+    description: "If you have another idea in mind, you can propose your own topic with instructor approval.",
+    example: "A custom research project approved by the teaching team."
+  }
+];
+
 
     // --- DOM Elements --------------------------------------------------------
     const els = {
