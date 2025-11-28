@@ -283,7 +283,7 @@
     <div class="section-title">📝 Poster Topic Registration</div>
     <div class="card">
       <div style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; background:#fff1f2; border:1px solid #fecdd3; padding:1rem; border-radius:8px;">
-        <strong>Important Notice:</strong> Due to entry errors, the system was reset on Friday. All groups must re-submit their details.
+        <strong>Important Notice:</strong> Due to entry errors, the system was reset on Friday. All groups can re-submit their details.
         <div style="margin-top:0.5rem; color:#333;">
           <strong>Instructions:</strong> Please ensure your group has reached a consensus <strong>before</strong> registering. One representative per group enters the topic and leader, sets a 4-digit PIN to lock the entry, and keeps the PIN to update the selection later if needed.
         </div>
