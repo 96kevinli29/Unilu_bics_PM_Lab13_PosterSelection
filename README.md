@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Poster Session: AI Technical Survey Workshop · Uni.lu</title>
@@ -182,10 +184,36 @@
     th { background: #f8fafc; font-weight: 600; color: #475569; }
     .leader-name { color: var(--primary); font-weight: 500; }
     
+    /* Delete Button Style */
+    .delete-btn {
+      background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5;
+      padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: bold; cursor: pointer;
+      font-size: 0.9rem; width: auto; display: inline-block;
+    }
+    .delete-btn:hover { background: #fecaca; }
+
     /* Messages */
     .message { margin-top: 0.8rem; font-size: 0.95rem; font-weight: 500; text-align: center; }
     .message.error { color: #dc2626; }
     .message.success { color: #16a34a; }
+
+    /* Footer Contact */
+    .page-footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e2e8f0;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+    .page-footer a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .page-footer a:hover {
+        text-decoration: underline;
+    }
 
     @media (max-width: 800px) {
       .grid { grid-template-columns: 1fr; }
@@ -217,7 +245,7 @@
       </div>
       <div class="event-item">
         <label>Location</label>
-        <div>Room MSA 4.520 (Mandatory)</div>
+        <div>Room MSA 4.520 (Mandatory attendance)</div>
       </div>
       <div class="event-item">
         <label>Amenities</label>
@@ -254,9 +282,12 @@
 
     <div class="section-title">📝 Poster Topic Registration</div>
     <div class="card">
-      <p class="muted" style="margin-top:0;">
-        <strong>Instructions:</strong> "Due to some requirements, the system was reset on Friday. All groups can re-submit their details by 29 Nov." We kindly ask that groups finalize their decision before filling out this form. One representative per group enters the topic and leader, sets a 4-digit PIN to lock the entry, and keeps the PIN to update the selection later if needed.
-      </p>
+      <div style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; background:#fff1f2; border:1px solid #fecdd3; padding:1rem; border-radius:8px;">
+        <strong>Important Notice:</strong> Due to entry errors, the system was reset on Friday. All groups must re-submit their details.
+        <div style="margin-top:0.5rem; color:#333;">
+          <strong>Instructions:</strong> Please ensure your group has reached a consensus <strong>before</strong> registering. One representative per group enters the topic and leader, sets a 4-digit PIN to lock the entry, and keeps the PIN to update the selection later if needed.
+        </div>
+      </div>
 
       <div class="grid">
         <div>
@@ -314,7 +345,7 @@
     <div class="card" style="margin-top:2rem;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
         <h3 style="margin:0;">Current Group Registrations</h3>
-        <button id="resetBtn" class="secondary" type="button">Reset (Admin Only)</button>
+        <button id="resetBtn" class="secondary" type="button">Reset All (Admin Only)</button>
       </div>
       
       <table>
@@ -324,11 +355,18 @@
             <th style="width:180px;">Leader</th>
             <th>Main Topic Area</th>
             <th>Specific Title</th>
+            <th style="width:60px;">Admin</th>
           </tr>
         </thead>
         <tbody id="assignmentsBody"></tbody>
       </table>
     </div>
+
+    <!-- Added Contact Footer -->
+    <div class="page-footer">
+        Any questions? Contact <a href="mailto:hongyang.li@uni.lu">hongyang.li@uni.lu</a>
+    </div>
+
   </div>
 
   <script>
@@ -473,21 +511,51 @@
     function renderTable() {
       els.tbody.innerHTML = "";
       if (assignments.length === 0) {
-        els.tbody.innerHTML = '<tr><td colspan="4" class="muted" style="text-align:center; padding:1.5rem;">No registrations yet. Be the first!</td></tr>';
+        els.tbody.innerHTML = '<tr><td colspan="5" class="muted" style="text-align:center; padding:1.5rem;">No registrations yet. Be the first!</td></tr>';
         return;
       }
       const sorted = [...assignments].sort((a, b) => a.group - b.group);
+      
       sorted.forEach(a => {
         const topic = topics.find(t => t.id === a.topicId);
         const tr = document.createElement("tr");
+        
+        // Create Delete Button
+        const delTd = document.createElement("td");
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "×";
+        delBtn.className = "delete-btn";
+        delBtn.title = "Delete this group (Admin only)";
+        delBtn.onclick = () => deleteAssignment(a.group);
+        delTd.appendChild(delBtn);
+
         tr.innerHTML = `
           <td><strong>Group ${a.group}</strong></td>
           <td><span class="leader-name">${a.leader || "Unknown"}</span></td>
           <td>${topic ? topic.label : "Custom"}</td>
           <td>${a.subtopic || "<em class='muted'>Generic</em>"}</td>
         `;
+        tr.appendChild(delTd); // Add the delete button column
+        
         els.tbody.appendChild(tr);
       });
+    }
+
+    function deleteAssignment(groupNum) {
+      const pwd = prompt("Enter Admin Password to delete Group " + groupNum + ":");
+      if (pwd === ADMIN_PASSWORD) {
+        assignments = assignments.filter(a => a.group !== groupNum);
+        saveData();
+        renderTopicOptions(); // Refresh dropdowns to free up topic
+        renderTable(); // Refresh table
+        // Reset form if the deleted group was currently selected
+        if(Number(els.group.value) === groupNum) {
+            els.group.dispatchEvent(new Event('change'));
+        }
+        showMsg(`Group ${groupNum} deleted.`, "success");
+      } else if (pwd !== null) {
+        alert("Wrong Password");
+      }
     }
 
     function showMsg(text, type) {
@@ -544,7 +612,7 @@
     });
 
     els.reset.addEventListener("click", () => {
-      const pwd = prompt("Admin Password:");
+      const pwd = prompt("WARNING: This will delete ALL groups.\nEnter Admin Password:");
       if (pwd === ADMIN_PASSWORD) {
         assignments = [];
         saveData();
@@ -559,3 +627,4 @@
     init();
   </script>
 </body>
+</html>
