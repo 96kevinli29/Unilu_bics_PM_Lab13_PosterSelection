@@ -255,7 +255,7 @@
     <div class="section-title">📝 Poster Topic Registration</div>
     <div class="card">
       <p class="muted" style="margin-top:0;">
-        <strong>Instructions:</strong> [Due to some entry errors, the system was reset on Friday. All groups can re-submit their details by 29 Nov.] Please ensure your group has reached a consensus before registering. One representative per group enters the topic and leader, sets a 4-digit PIN to lock the entry, and keeps the PIN to update the selection later if needed.
+        <strong>Instructions:</strong> "Due to some requirements, the system was reset on Friday. All groups can re-submit their details by 29 Nov." We kindly ask that groups finalize their decision before filling out this form. One representative per group enters the topic and leader, sets a 4-digit PIN to lock the entry, and keeps the PIN to update the selection later if needed.
       </p>
 
       <div class="grid">
